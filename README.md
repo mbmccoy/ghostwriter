@@ -2,12 +2,11 @@
 
 ## Setting up python on a dev machine
 
-We use Docker so that we can get as close to a reproducible
-image as possible with the RPi. To build the `ghostwriter` image,
-simply run 
+We use virtual environments so that we can get as close to a reproducible
+image as possible with the RPi. 
 
 ```bash
-make docker
+make venv
 ```
 
 ## Setting up python on the RPi
