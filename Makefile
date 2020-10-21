@@ -44,7 +44,19 @@ venv/.installed:
 	&& pip install -r requirements.txt \
 	&& touch venv/.installed
 
+requirements: requirements.txt
+	. venv/bin/activate \
+	&& pip install -r requirements.txt \
+	&& touch venv/.installed
 
 test: venv requirements.txt
 	. venv/bin/activate \
 	&& pytest tests
+
+lint:
+	. venv/bin/activate \
+	&& black --check ghostwriter tests
+
+lint-fix:
+	. venv/bin/activate \
+	&& black ghostwriter tests

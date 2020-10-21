@@ -18,5 +18,6 @@
 # along with the Cdf Plasma Controller.  If not, see
 # <http://www.gnu.org/licenses/>.
 
+black
 pigpio
 pytest
