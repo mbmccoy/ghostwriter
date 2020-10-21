@@ -19,6 +19,10 @@ jobs:
           paths:
             - "venv"
       - run:
+          name: Running linter
+          command: |
+            make lint
+      - run:
           name: Running tests
           command: |
             make test
