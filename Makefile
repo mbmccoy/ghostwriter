@@ -54,7 +54,9 @@ test: venv requirements.txt
 	&& pytest tests
 
 lint:
-	black --check ghostwriter tests
+	. venv/bin/activate \
+	&& black --check ghostwriter tests
 
 lint-fix:
-	black ghostwriter tests
+	. venv/bin/activate \
+	&& black ghostwriter tests
