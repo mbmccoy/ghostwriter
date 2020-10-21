@@ -11,8 +11,11 @@ make venv
 
 ## Setting up python on the RPi
 
-On the Raspberry Pi, we won't use Docker; instead, we'll use
-virtual environments. We can get all set up using 
+On the Raspberry Pi, we can set up everything using
+
+```bash
+make pi-setup
+```
 
 ## Tests
 
