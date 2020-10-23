@@ -101,7 +101,7 @@ else
       -D CMAKE_INSTALL_PREFIX=/usr/local \
       -D OPENCV_EXTRA_MODULES_PATH=../../opencv_contrib/modules \
       -D BUILD_TESTS=OFF \
-      -D INSTALL_PYTHON_EXAMPLES=OFF \
+      -D INSTALL_PYTHON_EXAMPLES=ON \
       -D OPENCV_ENABLE_NONFREE=ON \
       -D CMAKE_SHARED_LINKER_FLAGS=-latomic \
       -D BUILD_EXAMPLES=OFF ..

@@ -1,0 +1,2 @@
+#!/bin/sh
+GIT_WORK_TREE=/path/to/webroot/of/mywebsite git checkout -f
