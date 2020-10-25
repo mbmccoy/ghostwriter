@@ -117,3 +117,6 @@ if [ "$R_PI" = "True" ] ; then
   sudo cp ./dphys-swapfile.backup /etc/dphys-swapfile
   sudo systemctl restart dphys-swapfile
 fi
+
+popd
+cp ./build/opencv/build/python_loader cv2
