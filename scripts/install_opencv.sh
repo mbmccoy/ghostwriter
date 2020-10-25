@@ -82,7 +82,6 @@ fi
 git clone https://github.com/opencv/opencv.git || echo "OpenCV already cloned..."
 git clone https://github.com/opencv/opencv_contrib.git || echo "OpenCV contrib already cloned..."
 
-rm -rf opencv/build
 mkdir -p opencv/build && pushd opencv/build
 
 if [ "$R_PI" = "True" ] ; then
@@ -112,8 +111,9 @@ make -j$(nproc)
 sudo make install
 sudo ldconfig
 
+popd
 if [ "$R_PI" = "True" ] ; then
   # Clean up swapfile size
-  sudo cp ./dphys-swapfile.backup /etc/dphy-swapfile
+  sudo cp ./dphys-swapfile.backup /etc/dphys-swapfile
   sudo systemctl restart dphys-swapfile
 fi
