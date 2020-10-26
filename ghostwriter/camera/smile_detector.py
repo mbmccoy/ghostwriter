@@ -18,7 +18,7 @@ def detect_and_display(frame, face_cascade, eyes_cascade, smile_cascade):
 
         # -- In each face, detect eyes and smiles
         eyes = eyes_cascade.detectMultiScale(faceROI)
-        smiles = smile_cascade.detectMultiScale(faceROI, 1.8,  20)
+        smiles = smile_cascade.detectMultiScale(faceROI, 1.8, 20)
 
         for (x2, y2, w2, h2) in eyes:
             eye_center = (x + x2 + w2 // 2, y + y2 + h2 // 2)
@@ -26,8 +26,8 @@ def detect_and_display(frame, face_cascade, eyes_cascade, smile_cascade):
             frame = cv.circle(frame, eye_center, radius, (255, 0, 0), 4)
 
         for (x2, y2, w2, h2) in smiles:
-            pt1 = (x+x2, y+y2)
-            pt2 = (x+x2+w2, y+y2+h2)
+            pt1 = (x + x2, y + y2)
+            pt2 = (x + x2 + w2, y + y2 + h2)
             print(pt1, pt2)
             frame = cv.rectangle(frame, pt1, pt2, color=(255, 255, 0))
 
