@@ -49,17 +49,6 @@ venv/.requirements-ci-installed: requirements requirements-ci.txt
 	&& pip install -r requirements-ci.txt \
 	&& touch venv/.requirements-ci-installed
 
-venv/.requirements-ci-installed:
-	. venv/bin/activate \
-	&& pip install -r requirements.txt \
-	&& touch venv/.requirements-installed
-
-
-venv/.requirements-installed:
-	. venv/bin/activate \
-	&& pip install -r requirements.txt \
-	&& touch venv/.requirements-installed
-
 test: venv requirements.txt
 	. venv/bin/activate \
 	&& pytest tests
