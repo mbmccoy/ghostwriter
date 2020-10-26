@@ -18,7 +18,7 @@ mkdir -p build && pushd build
 
 if [ "$R_PI" = "True" ] ; then
   # Additional RPi packages not available on ubuntu
-  sudo apt update && apt upgrade -y && apt install -y \
+  sudo apt update && sudo apt upgrade -y && sudo apt install -y \
     cmake \
     build-essential \
     pkg-config git \
