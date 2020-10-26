@@ -2,13 +2,13 @@
 set -ex
 
 FILE_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-BASE_DIR="${FILE_DIR}"
+BASE_DIR="${FILE_DIR}/.."
 VENV_DIR="${BASE_DIR}"/venv
 
 source venv/bin/activate
 PYTHON3_EXECUTABLE="$(command -v python3)"
 PYTHON_INCLUDE_DIR="${VENV_DIR}"/include
-PYTHON_VERSION="$(python ./scripts/python_info.py --version)}"
+PYTHON_VERSION="$(python ./scripts/python_info.py --version)"
 PYTHON_LIBRARY=$(python ./scripts/python_info.py --library)
 OPENCV_PYTHON3_INSTALL_PATH="${VENV_DIR}"/lib/python"${PYTHON_VERSION}"/site-packages
 

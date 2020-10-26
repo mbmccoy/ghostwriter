@@ -59,7 +59,7 @@ lint-fix:
 	&& black ghostwriter tests
 
 
-opencv:
+opencv: venv
 	./scripts/install_opencv.sh \
 	&&. venv/bin/activate \
 	&& pip install ./build/opencv/build/python_loader

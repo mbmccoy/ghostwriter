@@ -9,13 +9,10 @@ if __name__ == "__main__":
                     "OpenCV. You can process both videos and images."
     )
     args = parser.parse_args()
-    if args.algo == "MOG2":
-        backSub = cv.createBackgroundSubtractorMOG2()
-    else:
-        backSub = cv.createBackgroundSubtractorKNN()
-    capture = cv.VideoCapture(cv.samples.findFileOrKeep(args.input))
+    backSub = cv.createBackgroundSubtractorMOG2()
+    capture = cv.VideoCapture(0)
     if not capture.isOpened:
-        print("Unable to open: " + args.input)
+        print("Unable to open camera")
         exit(0)
     while True:
         ret, frame = capture.read()
