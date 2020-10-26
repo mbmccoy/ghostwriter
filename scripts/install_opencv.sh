@@ -1,12 +1,18 @@
 #!/usr/bin/env bash
 set -ex
-# Need  to run with `sudo`
-# Cribbed from https://pimylifeup.com/raspberry-pi-opencv/
 
-# check if it is a raspberry pi, because we'll need a special ruby first
-R_PI=$(python -c "import platform; print('raspberrypi' in platform.uname())")
+FILE_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+BASE_DIR="${FILE_DIR}"
+VENV_DIR="${BASE_DIR}"/venv
 
-set -e
+source venv/bin/activate
+PYTHON3_EXECUTABLE="$(command -v python3)"
+PYTHON_INCLUDE_DIR="${VENV_DIR}"/include
+PYTHON_VERSION="$(python ./scripts/python_info.py --version)}"
+PYTHON_LIBRARY=$(python ./scripts/python_info.py --library)
+OPENCV_PYTHON3_INSTALL_PATH="${VENV_DIR}"/lib/python"${PYTHON_VERSION}"/site-packages
+
+R_PI=$(python ./scripts/python_info.py --raspberry-pi)
 
 mkdir -p build && pushd build
 
@@ -103,10 +109,18 @@ else
       -D INSTALL_PYTHON_EXAMPLES=ON \
       -D OPENCV_ENABLE_NONFREE=ON \
       -D CMAKE_SHARED_LINKER_FLAGS=-latomic \
+      -D BUILD_opencv_python3=ON \
+      -D BUILD_opencv_python2=OFF \
+      -D INSTALL_CREATE_DISTRIB=ON \
+      -D PYTHON3_EXECUTABLE="${PYTHON3_EXECUTABLE}" \
+      -D PYTHON_INCLUDE_DIR="${PYTHON_INCLUDE_DIR}" \
+      -D PYTHON_LIBRARY="${PYTHON_LIBRARY}" \
+      -D PYTHON3_NUMPY_INCLUDE_DIRS="${OPENCV_PYTHON3_INSTALL_PATH}/numpy/core/include" \
+      -D OPENCV_PYTHON3_INSTALL_PATH="${OPENCV_PYTHON3_INSTALL_PATH}" \
       -D BUILD_EXAMPLES=OFF ..
 fi
 
-make -j$(nproc)
+make -j"$(nproc)"
 
 sudo make install
 sudo ldconfig
@@ -117,6 +131,3 @@ if [ "$R_PI" = "True" ] ; then
   sudo cp ./dphys-swapfile.backup /etc/dphys-swapfile
   sudo systemctl restart dphys-swapfile
 fi
-
-popd
-cp ./build/opencv/build/python_loader cv2
