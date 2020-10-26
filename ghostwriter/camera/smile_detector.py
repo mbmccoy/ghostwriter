@@ -90,5 +90,5 @@ if __name__ == "__main__":
             eyes_cascade=eyes_cascade,
             smile_cascade=smile_cascade,
         )
-        if cv.waitKey(30) == 27:
+        if cv.waitKey(30) == ord("q"):
             break
