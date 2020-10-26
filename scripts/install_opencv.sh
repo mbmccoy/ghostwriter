@@ -90,6 +90,15 @@ git clone https://github.com/opencv/opencv_contrib.git || echo "OpenCV contrib a
 
 mkdir -p opencv/build && pushd opencv/build
 
+CMAKE_PYTHON_FLAGS="-D BUILD_opencv_python3=ON \
+      -D BUILD_opencv_python2=OFF \
+      -D INSTALL_PYTHON_EXAMPLES=OFF \
+      -D INSTALL_CREATE_DISTRIB=ON \
+      -D PYTHON3_EXECUTABLE=${PYTHON3_EXECUTABLE} \
+      -D PYTHON_INCLUDE_DIR=${PYTHON_INCLUDE_DIR} \
+      -D PYTHON_LIBRARY=${PYTHON_LIBRARY} \
+      -D PYTHON3_NUMPY_INCLUDE_DIRS=${OPENCV_PYTHON3_INSTALL_PATH}/numpy/core/include \
+      -D OPENCV_PYTHON3_INSTALL_PATH=${OPENCV_PYTHON3_INSTALL_PATH}"
 if [ "$R_PI" = "True" ] ; then
   cmake -D CMAKE_BUILD_TYPE=RELEASE \
       -D CMAKE_INSTALL_PREFIX=/usr/local \
@@ -97,26 +106,19 @@ if [ "$R_PI" = "True" ] ; then
       -D ENABLE_NEON=ON \
       -D ENABLE_VFPV3=ON \
       -D BUILD_TESTS=OFF \
-      -D INSTALL_PYTHON_EXAMPLES=OFF \
       -D OPENCV_ENABLE_NONFREE=ON \
       -D CMAKE_SHARED_LINKER_FLAGS=-latomic \
-      -D BUILD_EXAMPLES=OFF ..
+      -D BUILD_EXAMPLES=OFF \
+      "${CMAKE_PYTHON_FLAGS}" \
+       ..
 else
   cmake -D CMAKE_BUILD_TYPE=RELEASE \
       -D CMAKE_INSTALL_PREFIX=/usr/local \
       -D OPENCV_EXTRA_MODULES_PATH=../../opencv_contrib/modules \
       -D BUILD_TESTS=OFF \
-      -D INSTALL_PYTHON_EXAMPLES=ON \
       -D OPENCV_ENABLE_NONFREE=ON \
       -D CMAKE_SHARED_LINKER_FLAGS=-latomic \
-      -D BUILD_opencv_python3=ON \
-      -D BUILD_opencv_python2=OFF \
-      -D INSTALL_CREATE_DISTRIB=ON \
-      -D PYTHON3_EXECUTABLE="${PYTHON3_EXECUTABLE}" \
-      -D PYTHON_INCLUDE_DIR="${PYTHON_INCLUDE_DIR}" \
-      -D PYTHON_LIBRARY="${PYTHON_LIBRARY}" \
-      -D PYTHON3_NUMPY_INCLUDE_DIRS="${OPENCV_PYTHON3_INSTALL_PATH}/numpy/core/include" \
-      -D OPENCV_PYTHON3_INSTALL_PATH="${OPENCV_PYTHON3_INSTALL_PATH}" \
+      "${CMAKE_PYTHON_FLAGS}" \
       -D BUILD_EXAMPLES=OFF ..
 fi
 
