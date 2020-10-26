@@ -39,16 +39,20 @@ venv: venv/.installed
 
 venv/.installed:
 	sudo apt-get install -y python3-venv \
-	&& python3 -m venv venv
+	&& python3 -m venv venv \
+	&& touch venv/.installed
 
-requirements: venv/.installed opencv requirements.txt
+requirements: venv/.requirements-installed requirements.txt
+
+venv/.requirements-installed:
 	. venv/bin/activate \
 	&& pip install -r requirements.txt \
-	&& touch venv/.installed
+	&& touch venv/.requirements-installed
 
 test: venv requirements.txt
 	. venv/bin/activate \
 	&& pytest tests
+
 
 lint:
 	. venv/bin/activate \

@@ -21,4 +21,3 @@
 black
 pigpio
 pytest
-./opencv
