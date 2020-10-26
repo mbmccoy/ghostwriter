@@ -73,3 +73,7 @@ opencv: venv
 	./scripts/install_opencv.sh \
 	&&. venv/bin/activate \
 	&& pip install ./build/opencv/build/python_loader
+
+
+clean:
+	rm -rf build
