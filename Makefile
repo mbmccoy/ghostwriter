@@ -44,6 +44,8 @@ venv/.installed:
 
 requirements: venv/.requirements-installed requirements.txt
 
+requirements-ci: requirements requirements-ci.txt
+
 venv/.requirements-installed:
 	. venv/bin/activate \
 	&& pip install -r requirements.txt \

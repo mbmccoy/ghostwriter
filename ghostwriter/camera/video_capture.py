@@ -5,8 +5,8 @@ import argparse
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description="This program shows how to use "
-                    "background subtraction methods provided by" 
-                    "OpenCV. You can process both videos and images."
+        "background subtraction methods provided by"
+        "OpenCV. You can process both videos and images."
     )
     args = parser.parse_args()
     backSub = cv.createBackgroundSubtractorMOG2()
