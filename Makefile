@@ -40,6 +40,8 @@ venv: venv/.installed
 venv/.installed:
 	sudo apt-get install -y python3-venv \
 	&& python3 -m venv venv \
+	&& . venv/bin/activate \
+	&& pip install wheel \
 	&& touch venv/.installed
 
 requirements: venv/.requirements-installed requirements.txt
