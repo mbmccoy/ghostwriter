@@ -44,8 +44,8 @@ venv/.installed:
 	&& pip install wheel \
 	&& touch venv/.installed
 
-requirements: venv/.requirements-installed requirements.txt
-venv/.requirements-installed: requirements requirements-ci.txt
+requirements: venv requirements.txt venv/.requirements-installed
+venv/.requirements-installed: requirements-ci.txt
 	. venv/bin/activate \
 	&& pip install -r requirements-ci.txt \
 	&& touch venv/.requirements-installed
