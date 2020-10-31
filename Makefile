@@ -1,6 +1,6 @@
 IMAGE = ghostwriter
 
-.PHONY: test pigpio-daemon install-pigpio pi-setup pi-packages venv
+.PHONY: test pigpio-daemon install-pigpio pi-setup pi-packages venv requirements
 
 pigpio-daemon: install-pigpio
 	sudo cp pigpio/util/pigpiod /etc/init.d
@@ -12,7 +12,7 @@ install-pigpio: pigpio/.pigpio-installed
 
 download-pigpio: pigpio/pigpio-master
 
-pi-setup: pigpio-daemon pi-packages
+pi-setup: venv pigpio-daemon pi-packages requirements
 
 pigpio/pigpio-master:
 	mkdir -p pigpio \
@@ -41,17 +41,26 @@ venv/.installed:
 	sudo apt-get install -y python3-venv \
 	&& python3 -m venv venv \
 	&& . venv/bin/activate \
-	&& pip install -r requirements.txt \
+	&& pip install wheel \
 	&& touch venv/.installed
 
-requirements: requirements.txt
+requirements: venv opencv requirements.txt venv/.requirements-installed
+venv/.requirements-installed: requirements.txt
 	. venv/bin/activate \
 	&& pip install -r requirements.txt \
-	&& touch venv/.installed
+	&& touch venv/.requirements-installed
+
+
+requirements-ci: venv/.requirements-ci-installed
+venv/.requirements-ci-installed: requirements-ci.txt
+	. venv/bin/activate \
+	&& pip install -r requirements-ci.txt \
+	&& touch venv/.requirements-ci-installed
 
 test: venv requirements.txt
 	. venv/bin/activate \
 	&& pytest tests
+
 
 lint:
 	. venv/bin/activate \
@@ -60,3 +69,16 @@ lint:
 lint-fix:
 	. venv/bin/activate \
 	&& black ghostwriter tests
+
+
+opencv: venv venv/.opencv-installed
+
+venv/.opencv-installed:
+	./scripts/install_opencv.sh \
+	&& . venv/bin/activate \
+	&& pip install ./build/opencv/build/python_loader \
+	&& touch venv/.opencv-installed
+
+
+clean:
+	rm -rf build
