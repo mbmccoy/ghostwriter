@@ -109,7 +109,7 @@ def main():
         help="Path to eyes cascade.",
         default="{}/haarcascades/haarcascade_eye_tree_eyeglasses.xml".format(DATA_DIR),
     )
-    parser.add_argument("--camera", help="Camera number.", type=int, default=1)
+    parser.add_argument("--camera", help="Camera number.", type=int, default=0)
     args = parser.parse_args()
 
     gamma_corrector = GammaCorrector()
@@ -152,7 +152,7 @@ def main():
             eyes_cascade=eyes_cascade,
             smile_cascade=smile_cascade,
         )
-        key = cv.waitKey(1000)
+        key = cv.waitKey(30)
         logger.debug("Key = %s", key)
         gamma = update_gamma_from_key_press(gamma, key)
         if key == QUIT:
