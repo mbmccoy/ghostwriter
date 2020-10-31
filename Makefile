@@ -44,7 +44,7 @@ venv/.installed:
 	&& pip install wheel \
 	&& touch venv/.installed
 
-requirements: venv requirements.txt venv/.requirements-installed
+requirements: venv opencv requirements.txt venv/.requirements-installed
 venv/.requirements-installed: requirements.txt
 	. venv/bin/activate \
 	&& pip install -r requirements.txt \
@@ -71,10 +71,13 @@ lint-fix:
 	&& black ghostwriter tests
 
 
-opencv: requirements
+opencv: venv venv/.opencv-installed
+
+venv/.opencv-installed:
 	./scripts/install_opencv.sh \
-	&&. venv/bin/activate \
-	&& pip install ./build/opencv/build/python_loader
+	&& . venv/bin/activate \
+	&& pip install ./build/opencv/build/python_loader \
+	&& touch venv/.opencv-installed
 
 
 clean:
