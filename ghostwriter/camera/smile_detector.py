@@ -87,8 +87,10 @@ def detect_and_display(frame, face_cascade, eyes_cascade, smile_cascade):
 
 
 def main():
-    log_format = "%(levelname)s:%(asctime)s:%(name)s:%(filename)s:" \
-                 "%(funcName)s:%(lineno)d:%(message)s"
+    log_format = (
+        "%(levelname)s:%(asctime)s:%(name)s:%(filename)s:"
+        "%(funcName)s:%(lineno)d:%(message)s"
+    )
     logging.basicConfig(format=log_format, level=logging.DEBUG)
 
     parser = argparse.ArgumentParser(
