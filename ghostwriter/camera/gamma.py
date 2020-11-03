@@ -1,3 +1,4 @@
+"""Gamma correction."""
 import logging
 
 import cv2 as cv

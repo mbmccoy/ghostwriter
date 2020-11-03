@@ -1,3 +1,4 @@
+"""Utilities for naming and loading colors."""
 import os
 from typing import Dict, Tuple
 
