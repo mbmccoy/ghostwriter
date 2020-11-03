@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
-set -ex
+HELP="USAGE: convert_to_gif <input-video-file>"
+
+if [ "${1}" == "-h" ]; then
+  echo "${HELP}"
+fi
 
 TEMP_DIR=$(mktemp -d)
 FILE_NAME=$(basename -- "$1")
