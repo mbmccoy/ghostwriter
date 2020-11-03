@@ -9,6 +9,7 @@ COLOR_FILE = os.path.join(DATA_DIR, "xkcd", "colors.txt")
 
 _XKCD_COLORS = None
 
+
 def _get_color_bgr(color: str) -> Tuple[int, int, int]:
     return int(color[5:7], base=16), int(color[3:5], base=16), int(color[1:3], base=16)
 
@@ -16,7 +17,7 @@ def _get_color_bgr(color: str) -> Tuple[int, int, int]:
 def load_xkcd_colors() -> Dict[str, Tuple[int, int, int]]:
     """Loads XKCD colors as dict, in BGR order."""
     global _XKCD_COLORS
-    if  _XKCD_COLORS is not None:
+    if _XKCD_COLORS is not None:
         return _XKCD_COLORS
 
     with open(COLOR_FILE, "r") as fp:

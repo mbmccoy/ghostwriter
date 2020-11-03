@@ -50,9 +50,7 @@ def detect_and_display(frame, face_cascade, eyes_cascade, smile_cascade):
 
 
 def main():
-    parser = default_arguments(
-        description="Code for Cascade Classifier tutorial."
-    )
+    parser = default_arguments(description="Code for Cascade Classifier tutorial.")
     parser.add_argument(
         "--face_cascade",
         help="Path to face cascade.",

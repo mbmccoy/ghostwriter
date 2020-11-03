@@ -1,10 +1,9 @@
 import logging
-import time
 
 import cv2 as cv
 import numpy as np
 
-from ghostwriter.camera.colors import load_xkcd_colors, xkcd_color_matrix_like
+from ghostwriter.camera.colors import xkcd_color_matrix_like
 from ghostwriter.camera.keys import QUIT
 from ghostwriter.utils import default_arguments, set_up_logging
 
@@ -27,9 +26,7 @@ BACKGROUND_SUBTRACTION_ALGORITHMS = {
 
 
 def main():
-    parser = default_arguments(
-        description="Background substraction methods."
-    )
+    parser = default_arguments(description="Background substraction methods.")
     parser.add_argument(
         "--algorithm",
         choices=sorted(BACKGROUND_SUBTRACTION_ALGORITHMS),
@@ -39,8 +36,6 @@ def main():
     args = parser.parse_args()
     set_up_logging(args.verbose)
     logger = logging.getLogger(__name__)
-
-    colors = load_xkcd_colors()
 
     back_sub = BACKGROUND_SUBTRACTION_ALGORITHMS[args.algorithm]()
 
@@ -54,7 +49,7 @@ def main():
     ret, frame = cap.read()
     codec = cv.VideoWriter_fourcc(*"MJPG")
     video_writer = cv.VideoWriter(
-        filename='outpy.avi',
+        filename="outpy.avi",
         apiPreference=0,
         fourcc=codec,
         fps=12.0,
@@ -68,24 +63,21 @@ def main():
 
     output_green = output.copy()
     last_pink = output.copy()
-    black = np.zeros_like(frame)
     pink = xkcd_color_matrix_like(frame, color_name="hot pink")
     green = xkcd_color_matrix_like(frame, color_name="neon green")
 
-    # Mixing parameters
-    alpha = 0.95
-    beta = (1.0 - alpha)
-    gamma = 0.0
-
-    kernel = np.array([
-        [2.0, 0.5, 0.5, -1.0],
-        [0.5, -1, 1, 0.5],
-        [0, 1, -1, 0.5],
-        [1.0, 0.5, 0.5, 2.],
-    ], np.float32)
-    kernel = 0.9 * kernel/kernel.sum()
-    cv.namedWindow('OutputDown', cv.WINDOW_NORMAL)
-    cv.resizeWindow('OutputDown', 400, 400)
+    kernel = np.array(
+        [
+            [2.0, 0.5, 0.5, -1.0],
+            [0.5, -1, 1, 0.5],
+            [0, 1, -1, 0.5],
+            [1.0, 0.5, 0.5, 2.0],
+        ],
+        np.float32,
+    )
+    kernel = 0.9 * kernel / kernel.sum()
+    cv.namedWindow("OutputDown", cv.WINDOW_NORMAL)
+    cv.resizeWindow("OutputDown", 400, 400)
     while cv.waitKey(33) != QUIT and frame is not None:
         ret, frame = cap.read()
         foreground_mask = back_sub.apply(frame, learningRate=0.1)
@@ -94,8 +86,6 @@ def main():
         except cv.error:
             background_image = None
         background_mask = ~foreground_mask
-        frame_gray = make_gray(frame)
-
         pink_mask = cv.bitwise_and(pink, pink, mask=foreground_mask)
         green_mask = cv.bitwise_and(green, green, mask=foreground_mask)
 
@@ -113,12 +103,12 @@ def main():
             (16, 16),
             interpolation=cv.INTER_NEAREST,
         )
-        cv.imshow('Frame', frame)
-        cv.imshow('Foreground Mask', pink_mask)
+        cv.imshow("Frame", frame)
+        cv.imshow("Foreground Mask", pink_mask)
         if background_image is not None:
             cv.imshow("Background image", background_image)
-        cv.imshow('Output', output)
-        cv.imshow('OutputDown', output_down)
+        cv.imshow("Output", output)
+        cv.imshow("OutputDown", output_down)
 
         if np.any(output) or writing_started:
             writing_started = True
