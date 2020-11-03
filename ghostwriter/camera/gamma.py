@@ -9,6 +9,7 @@ class GammaCorrector:
     """
     Gamma correction using pre-computed lookup table.
     """
+
     _BASE = np.linspace(0, 1, 256)
 
     def __init__(self, num_levels=128, gamma_min=0.001, gamma_max=5.0):
