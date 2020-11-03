@@ -2,6 +2,7 @@
 import os
 from typing import Dict, Tuple
 
+import cv2 as cv
 import numpy as np
 
 from ghostwriter.paths import DATA_DIR
@@ -33,6 +34,14 @@ def load_xkcd_colors() -> Dict[str, Tuple[int, int, int]]:
 
 
 def xkcd_color_matrix_like(matrix: np.ndarray, color_name: str) -> np.ndarray:
+    """Get a solid color matrix with the same shape as the array."""
     colors = load_xkcd_colors()
     color = colors[color_name]
     return np.full_like(matrix, color)  # noqa
+
+
+def make_gray(frame: np.ndarray) -> np.ndarray:
+    """Make an OpenCV BGR frame Gray."""
+    frame_gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
+    frame_gray = cv.equalizeHist(frame_gray)
+    return cv.cvtColor(frame_gray, cv.COLOR_GRAY2BGR)

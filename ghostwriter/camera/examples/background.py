@@ -4,15 +4,8 @@ import cv2 as cv
 import numpy as np
 
 from ghostwriter.camera.colors import xkcd_color_matrix_like
-from ghostwriter.camera.keys import QUIT
+from ghostwriter.camera.keymap import QUIT
 from ghostwriter.utils import default_arguments, set_up_logging
-
-
-def make_gray(frame: np.ndarray) -> np.ndarray:
-    frame_gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
-    frame_gray = cv.equalizeHist(frame_gray)
-    return cv.cvtColor(frame_gray, cv.COLOR_GRAY2BGR)
-
 
 BACKGROUND_SUBTRACTION_ALGORITHMS = {
     "MOG2": cv.createBackgroundSubtractorMOG2,

@@ -4,7 +4,7 @@ import logging
 from ghostwriter.paths import DATA_DIR
 from ghostwriter.utils import default_arguments, set_up_logging
 from ghostwriter.camera.gamma import GammaCorrector
-from ghostwriter.camera.keys import KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT, QUIT
+from ghostwriter.camera.keymap import KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT, QUIT
 
 
 def update_gamma_from_key_press(gamma, key, factor=1.1):

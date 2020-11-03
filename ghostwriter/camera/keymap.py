@@ -1,5 +1,6 @@
 """Maps for OpenCV keys to nice names."""
 
+# Arrow keys
 KEY_LEFT = 81
 KEY_UP = 82
 KEY_RIGHT = 83
