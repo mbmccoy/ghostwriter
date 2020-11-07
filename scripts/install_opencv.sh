@@ -82,7 +82,8 @@ else
     libdc1394-22-dev \
     libopenexr-dev \
     libgstreamer-plugins-base1.0-dev \
-    libgstreamer1.0-dev
+    libgstreamer1.0-dev \
+    ffmpeg
 fi
 
 git clone https://github.com/opencv/opencv.git || echo "OpenCV already cloned..."

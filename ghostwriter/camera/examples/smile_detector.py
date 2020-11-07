@@ -1,51 +1,14 @@
 import cv2 as cv
-import argparse
 import logging
 
-import numpy as np
-
 from ghostwriter.paths import DATA_DIR
-
-logger = logging.getLogger(__name__)
-
-KEY_LEFT = 81
-KEY_UP = 82
-KEY_RIGHT = 83
-KEY_DOWN = 84
-QUIT = ord("q")
-
-
-class GammaCorrector:
-    _BASE = np.linspace(0, 1, 256)
-
-    def __init__(self, num_levels=128, gamma_min=0.001, gamma_max=5.0):
-        self.logger = logging.getLogger(__name__)
-
-        self.logger.debug("Building lookup tables")
-        self._gamma_min = gamma_min
-        self._gamma_max = gamma_max
-        self._gammas = np.logspace(np.log10(gamma_min), np.log10(gamma_max), num_levels)
-        self._lookup_tables = [
-            self._generate_lookup_table(gamma) for gamma in self._gammas
-        ]
-        self.logger.debug("Done building lookup tables.")
-
-    @classmethod
-    def _generate_lookup_table(cls, gamma):
-        look_up_table = np.clip(np.power(cls._BASE, gamma) * 255.0, 0, 255)
-        return look_up_table.astype(np.uint8)
-
-    def _get_lookup_table(self, gamma):
-        gamma = np.clip(gamma, self._gamma_min, self._gamma_max)
-        index = np.searchsorted(self._gammas, gamma)
-        logger.debug("Index=%d", index)
-        return self._lookup_tables[index]
-
-    def correct(self, image, gamma):
-        return cv.LUT(image, self._get_lookup_table(gamma))
+from ghostwriter.utils import default_arguments, set_up_logging
+from ghostwriter.camera.gamma import GammaCorrector
+from ghostwriter.camera.keymap import KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT, QUIT
 
 
 def update_gamma_from_key_press(gamma, key, factor=1.1):
+    logger = logging.getLogger(__name__)
     if key == KEY_UP:
         new_gamma = gamma / factor
     elif key == KEY_DOWN:
@@ -57,7 +20,7 @@ def update_gamma_from_key_press(gamma, key, factor=1.1):
 
 
 def detect_and_display(frame, face_cascade, eyes_cascade, smile_cascade):
-
+    logger = logging.getLogger(__name__)
     frame_gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
     frame_gray = cv.equalizeHist(frame_gray)
 
@@ -87,15 +50,7 @@ def detect_and_display(frame, face_cascade, eyes_cascade, smile_cascade):
 
 
 def main():
-    log_format = (
-        "%(levelname)s:%(asctime)s:%(name)s:%(filename)s:"
-        "%(funcName)s:%(lineno)d:%(message)s"
-    )
-    logging.basicConfig(format=log_format, level=logging.DEBUG)
-
-    parser = argparse.ArgumentParser(
-        description="Code for Cascade Classifier tutorial."
-    )
+    parser = default_arguments(description="Code for Cascade Classifier tutorial.")
     parser.add_argument(
         "--face_cascade",
         help="Path to face cascade.",
@@ -111,11 +66,10 @@ def main():
         help="Path to eyes cascade.",
         default="{}/haarcascades/haarcascade_eye_tree_eyeglasses.xml".format(DATA_DIR),
     )
-    parser.add_argument("--camera", help="Camera number.", type=int, default=0)
     args = parser.parse_args()
-
+    set_up_logging(args.verbose)
+    logger = logging.getLogger(__name__)
     gamma_corrector = GammaCorrector()
-
     face_cascade_name = args.face_cascade
     eyes_cascade_name = args.eyes_cascade
     smile_cascade_name = args.smile_cascade
