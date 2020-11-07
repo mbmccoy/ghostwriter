@@ -17,7 +17,7 @@ def main():
 def run(pixels):
     pixel_value = [0, 0, 0]
     for i in range(1000):
-        pixel_value = ((pixel_value[0] + i) % 256, (pixel_value[1] + i % 2)% 256, (pixel_value[2] + i %3) % 256)
+        pixel_value = ((pixel_value[0] + i) % 64, (pixel_value[1] + i % 2)%64, (pixel_value[2] + i %3) % 64)
         pixels[i % pixels.n] = pixel_value
         time.sleep(0.01)
 
