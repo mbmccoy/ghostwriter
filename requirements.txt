@@ -22,3 +22,5 @@ black
 numpy
 pigpio
 pytest
+adafruit-circuitpython-neopixel
+

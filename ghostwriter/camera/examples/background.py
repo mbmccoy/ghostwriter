@@ -23,7 +23,7 @@ def main():
     parser.add_argument(
         "--algorithm",
         choices=sorted(BACKGROUND_SUBTRACTION_ALGORITHMS),
-        default="MOG2",
+        default="GMG",
     )
 
     args = parser.parse_args()
@@ -51,7 +51,6 @@ def main():
     )
     writing_started = False
     assert video_writer.isOpened()
-    print(video_writer.getBackendName())
     output = np.zeros_like(frame)
 
     output_green = output.copy()
