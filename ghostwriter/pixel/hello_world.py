@@ -11,7 +11,7 @@ def main():
         run(pixels)
     finally:
         for i in range(pixels.n):
-            pixels[0] = [0, 0, 0]
+            pixels[i] = [0, 0, 0]
 
 
 def run(pixels):
