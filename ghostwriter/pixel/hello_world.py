@@ -15,11 +15,11 @@ def main():
 
 
 def run(pixels):
-    pixel_value = [0, 0, 0]
-    for i in range(10000):
-        pixel_value = ((pixel_value[0] + i) % 64, (pixel_value[1] + i % 19)%64, (pixel_value[2] + i%33) % 64)
+    n = pixels.n
+    for i in range(n):
+        pixel_value = (100 % 256, (2*i) % 256, (128-2*i) % 256)
         pixels[i % pixels.n] = pixel_value
-
+        time.sleep(0.1)
 
 
 if __name__ == "__main__":
