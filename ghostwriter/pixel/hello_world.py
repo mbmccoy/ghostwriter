@@ -19,7 +19,6 @@ def run(pixels):
     for i in range(n):
         pixel_value = (100 % 256, (2 * i) % 256, (128 - 2 * i) % 256)
         pixels[i % pixels.n] = pixel_value
-        time.sleep(0.1)
 
 
 if __name__ == "__main__":
