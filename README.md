@@ -26,3 +26,9 @@ make test
 ```
 
 These tests are also run in CI.
+
+
+## Linting
+
+We use `black`. To fix your files locally, just run `make lint`. If you don't
+want changes, run `make lint-check` (this is what's run in CI).

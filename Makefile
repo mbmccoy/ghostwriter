@@ -4,7 +4,7 @@ IMAGE = ghostwriter
 	install-pigpio \
 	black \
 	lint \
-	lint-fix \
+	lint-check \
 	opencv \
 	pi-packages \
 	pi-setup \
@@ -73,15 +73,13 @@ test: venv requirements.txt
 	&& pytest tests
 
 
-lint:
+lint-check:
 	. venv/bin/activate \
 	&& black --check ghostwriter tests
 
-lint-fix:
+lint:
 	. venv/bin/activate \
 	&& black ghostwriter tests
-
-black: lint-fix
 
 opencv: venv venv/.opencv-installed
 
