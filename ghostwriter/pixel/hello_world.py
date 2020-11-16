@@ -6,7 +6,7 @@ import neopixel
 
 
 def main():
-    pixels = neopixel.NeoPixel(pin.D18, 16*16, brightness=0.05)
+    pixels = neopixel.NeoPixel(pin.D18, 16 * 16, brightness=0.05)
     try:
         run(pixels)
     finally:
