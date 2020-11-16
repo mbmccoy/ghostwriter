@@ -1,6 +1,17 @@
 IMAGE = ghostwriter
 
-.PHONY: test pigpio-daemon install-pigpio pi-setup pi-packages venv requirements
+.PHONY: \
+	install-pigpio \
+	black \
+	lint \
+	lint-check \
+	opencv \
+	pi-packages \
+	pi-setup \
+	pigpio-daemon \
+	test \
+	requirements \
+	venv
 
 pigpio-daemon: install-pigpio
 	sudo cp pigpio/util/pigpiod /etc/init.d
@@ -62,14 +73,13 @@ test: venv requirements.txt
 	&& pytest tests
 
 
-lint:
+lint-check:
 	. venv/bin/activate \
 	&& black --check ghostwriter tests
 
-lint-fix:
+lint:
 	. venv/bin/activate \
 	&& black ghostwriter tests
-
 
 opencv: venv venv/.opencv-installed
 

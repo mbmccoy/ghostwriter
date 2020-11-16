@@ -21,7 +21,7 @@ jobs:
       - run:
           name: Running linter
           command: |
-            make lint
+            make lint-check
       - run:
           name: Running tests
           command: |
