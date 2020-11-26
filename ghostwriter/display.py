@@ -1,10 +1,10 @@
 import abc
 import logging
-from functools import reduce
-from typing import Tuple, Optional
+from typing import Tuple, Optional, Dict
 
 import cv2
 import numpy as np
+from matplotlib import pyplot as plt
 
 try:
     import neopixel
@@ -47,7 +47,39 @@ class OpenCVDisplay(Display):
     def show(self, frame: np.ndarray) -> None:
         if frame.shape != self.shape:
             raise ValueError("Array shape must match window shape")
-        cv2.imshow(frame)
+        cv2.imshow(self.window_name, frame)
+
+
+
+class MatplotlibDisplay(Display):
+    """Display to a matplotlib figure."""
+
+    def __init__(
+            self,
+            is_brg: bool = True,
+    ):
+        self._image = None
+        self._is_brg = is_brg
+        self._has_been_closed = False
+
+    @property
+    def figure(self):
+        return self._image.figure
+
+    def show(self, frame: np.ndarray) -> None:
+        if self._is_brg:
+            frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        if self._image is None or self._has_been_closed:
+            self._image = plt.imshow(frame)
+            self._image.figure.canvas.mpl_connect("close_event", self._on_close)
+        else:
+            self._image.set_data(frame)
+        # TODO: Implement animation API rather than direct drawing?
+        plt.gcf().canvas.draw_idle()
+        plt.pause(0.0001)
+
+    def _on_close(self, event):
+        self._has_been_closed = True
 
 
 class AVIFileDisplay(Display):
@@ -133,3 +165,13 @@ def raster_index(
     )
     return np.ravel_multi_index(rastered_multi, dims=shape)
 
+
+_DISPLAYS: Dict[str, Display] = {}
+
+
+def mpl_imshow(window_name: str, opencv_image: np.ndarray):
+    """Matplotlib imageshow"""
+    if window_name not in _DISPLAYS:
+        _DISPLAYS[window_name] = MatplotlibDisplay(is_brg=True)
+    print("Drawing")
+    _DISPLAYS[window_name].show(opencv_image)
