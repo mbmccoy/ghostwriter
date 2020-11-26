@@ -32,3 +32,11 @@ These tests are also run in CI.
 
 We use `black`. To fix your files locally, just run `make lint`. If you don't
 want changes, run `make lint-check` (this is what's run in CI).
+
+
+# Troubleshooting
+
+
+## M1 Mac
+
+See [here](./docs/M1.md) for details.

@@ -1,10 +1,40 @@
+from typing import Dict
+
 import cv2 as cv
 import logging
+import numpy as np
+from matplotlib.image import AxesImage
 
 from ghostwriter.paths import DATA_DIR
 from ghostwriter.utils import default_arguments, set_up_logging
 from ghostwriter.camera.gamma import GammaCorrector
 from ghostwriter.camera.keymap import KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT, QUIT
+
+import matplotlib
+from matplotlib import pyplot as plt
+
+from scripts.python_info import is_m1_mac
+
+_WINDOWS: Dict[str, AxesImage] = {}
+
+
+def on_close(event):
+    event.canvas.figure.has_been_closed = True
+
+
+def imshow(window_name: str, opencv_image: np.ndarray):
+    rgb_image = cv.cvtColor(opencv_image, cv.COLOR_BGR2RGB)
+    window = _WINDOWS.get(window_name)
+    if window is None or window.figure.has_been_closed:
+        window = plt.imshow(rgb_image)
+        window.figure.has_been_closed = False
+        window.figure.canvas.mpl_connect("close_event", on_close)
+    else:
+        window.set_data(rgb_image)
+    _WINDOWS[window_name] = window
+    print("Drawing")
+    plt.gcf().canvas.draw_idle()
+    plt.pause(0.0001)
 
 
 def update_gamma_from_key_press(gamma, key, factor=1.1):
@@ -46,7 +76,8 @@ def detect_and_display(frame, face_cascade, eyes_cascade, smile_cascade):
             logger.debug("Smile detected!")
             frame = cv.rectangle(frame, pt1, pt2, color=(255, 255, 0))
 
-    cv.imshow("Capture - Face detection", frame)
+    # cv.imshow("Capture - Face detection", frame)
+    imshow("Capture - Face detection", frame)
 
 
 def main():
@@ -66,6 +97,11 @@ def main():
         help="Path to eyes cascade.",
         default="{}/haarcascades/haarcascade_eye_tree_eyeglasses.xml".format(DATA_DIR),
     )
+
+    # Turn on mac
+    if is_m1_mac():
+        matplotlib.use("MacOSX")
+
     args = parser.parse_args()
     set_up_logging(args.verbose)
     logger = logging.getLogger(__name__)
@@ -108,12 +144,6 @@ def main():
             eyes_cascade=eyes_cascade,
             smile_cascade=smile_cascade,
         )
-        key = cv.waitKey(30)
-        logger.debug("Key = %s", key)
-        gamma = update_gamma_from_key_press(gamma, key)
-        if key == QUIT:
-            logger.info("Quit key pressed.")
-            break
 
 
 if __name__ == "__main__":
