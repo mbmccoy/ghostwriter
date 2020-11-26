@@ -13,6 +13,7 @@ PYTHON_LIBRARY=$(python ./scripts/python_info.py --library)
 OPENCV_PYTHON3_INSTALL_PATH="${VENV_DIR}"/lib/python"${PYTHON_VERSION}"/site-packages
 
 R_PI=$(python ./scripts/python_info.py --raspberry-pi)
+M1_MAC=$(python ./scripts/python_info.py --m1-mac)
 
 mkdir -p build && pushd build
 
@@ -49,20 +50,24 @@ if [ "$R_PI" = "True" ] ; then
     python3-pip \
     python3-numpy \
     libjasper-dev \
-    libhdf5-103
+    libhdf5-103 \
+    ffmpeg
 
   # Change swapfile size
   cp /etc/dphys-swapfile ./dphys-swapfile.backup
   sed 's/^CONF_SWAPSIZE=100/CONF_SWAPSIZE=2048/g' /etc/dphys-swapfile > ./dphys-swapfile.new
   sudo cp ./dphys-swapfile.new /etc/dphys-swapfile
   sudo systemctl restart dphys-swapfile
+elif [ "$M1_MAC" = "True" ]; then
+  echo "Can't build on M1 machine. Try installing yourself via 'make requirements-ci'."
+  exit 1;
 else
   sudo apt install -y \
     build-essential \
     cmake \
     git \
     pkg-config \
-    libgtk-3-dev \
+    -3-dev \
     libavcodec-dev \
     libavformat-dev \
     libswscale-dev \

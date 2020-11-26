@@ -19,8 +19,8 @@
 # <http://www.gnu.org/licenses/>.
 
 black
+matplotlib
 numpy
 pigpio
 pytest
 adafruit-circuitpython-neopixel
-

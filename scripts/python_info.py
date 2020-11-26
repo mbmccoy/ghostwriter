@@ -87,6 +87,16 @@ def is_raspberry_pi():
     return "raspberrypi" in platform.uname()
 
 
+def is_m1_mac():
+    """Is this an M1 mac?"""
+    return "RELEASE_ARM64" in platform.version()
+
+
+def get_platform():
+    """Print the platform."""
+    return platform.uname()
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description="Get basic information about python.")
@@ -106,6 +116,16 @@ if __name__ == "__main__":
         action="store_true",
         help="Is this a raspberry pi?",
     )
+    group.add_argument(
+        "--m1-mac",
+        action="store_true",
+        help="Is this an M1 Macbook?",
+    )
+    group.add_argument(
+        "--platform",
+        action="store_true",
+        help="Print platform information.",
+    )
     args = parser.parse_args()
 
     version_str = "{}.{}".format(*sys.version_info[:2])
@@ -115,3 +135,7 @@ if __name__ == "__main__":
         print(get_python_library(python_version=version_str))
     if args.raspberry_pi:
         print(is_raspberry_pi())
+    if args.m1_mac:
+        print(is_m1_mac())
+    if args.platform:
+        print(get_platform())
