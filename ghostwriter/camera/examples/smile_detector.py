@@ -14,7 +14,6 @@ import matplotlib
 from scripts.python_info import is_m1_mac
 
 
-
 def update_gamma_from_key_press(gamma, key, factor=1.1):
     logger = logging.getLogger(__name__)
     if key == KEY_UP:

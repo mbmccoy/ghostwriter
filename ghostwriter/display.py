@@ -1,6 +1,6 @@
 import abc
 import logging
-from typing import Tuple, Optional, Dict
+from typing import Tuple, Dict
 
 import cv2
 import numpy as np
@@ -141,29 +141,50 @@ class NeoPixelDisplay(Display):
 
 
 def raster_index(
-        shape: Tuple[int, ...],
-        direction: Optional[Tuple[int, ...]] = None,
-) -> np.ndarray:
-    if direction is None:
-        direction = tuple(0 for _ in shape)
+        shape: Tuple[int, int],
+        rows: bool = True,
+        reverse_rows: bool = False,
+        reverse_columns: bool = False,
+) -> Tuple[np.ndarray, ...]:
+    """
 
-    def _raster_multi_index(multi_index: Tuple[int, ...]) -> Tuple[int, ...]:
-        result = tuple(
-            m if (i + d + 1) % 2 else s - m - 1
-            for i, (s, m, d) in enumerate(zip(shape, multi_index, direction))
-        )
-        print(multi_index, result)
-        return result
-    multi_indices = np.unravel_index(
-        np.arange(np.product(shape)),
-        shape=shape,
-    )
-    rastered_multi = np.apply_along_axis(
-        _raster_multi_index,
-        axis=0,
-        arr=multi_indices,
-    )
-    return np.ravel_multi_index(rastered_multi, dims=shape)
+    Parameters
+    ----------
+    rows
+        If ``True``, raster along rows. Otherwise, raster along columns.
+    reverse_rows
+        A changes the raster orientation over rows. The default (``False``)
+        starts left-to-right.
+    reverse_columns
+        A changes the raster orientation over columns. The default (``False``)
+        starts top-to-bottom.
+
+    Returns
+    -------
+    A pair (x, y) of indices into an array.
+    """
+    # Swap rows and columns
+    if not rows:
+        shape = shape[1], shape[0]
+        reverse_rows, reverse_columns = reverse_columns, reverse_rows
+    parity = 0
+    index = []
+    for i in range(shape[0]):
+        if reverse_columns:
+            i = shape[0] - i - 1
+            parity = (shape[0] + 1) % 2
+        for j in range(shape[1]):
+            if reverse_rows:
+                j = shape[1] - j - 1
+            if (i + parity) % 2:
+                index.append((i + 1) * shape[1] - (j + 1))
+            else:
+                index.append(i * shape[1] + j)
+    results = np.unravel_index(index, shape)
+    # Undo swap
+    if not rows:
+        results = results[1], results[0]
+    return results
 
 
 _DISPLAYS: Dict[str, Display] = {}
