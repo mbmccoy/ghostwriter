@@ -14,7 +14,7 @@ IMAGE = ghostwriter
 	venv
 
 pigpio-daemon: install-pigpio
-	sudo cp pigpio/util/pigpiod /etc/init.d
+	sudo cp pigpio/pigpio-master/pigpiod /etc/init.d
 	sudo chmod +x /etc/init.d/pigpiod
 	sudo update-rc.d pigpiod defaults
 	sudo service pigpiod start
@@ -38,6 +38,7 @@ pigpio/.pigpio-installed: download-pigpio
 	&& cd pigpio/pigpio-master \
 	&& make \
 	&& sudo make install \
+	&& cd ../.. \
 	&& touch pigpio/.pigpio-installed
 
 pi-packages: pigpio/.pi-packages-installed

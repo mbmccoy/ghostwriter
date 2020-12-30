@@ -1,6 +1,6 @@
 # ghostwriter
 
-## Setting up
+## Installation
 
 We use virtual environments so that we can get as close to a reproducible
 image as possible with the RPi. To get set up, simply run 
@@ -16,6 +16,11 @@ build step. If you are using SSH to connect to the pi, consider using
 `screen` or other tool to ensure that the command is not terminated before 
 it completes the build.
 
+## Running
+Run the production environment with
+```bash
+make pi-setup
+```
 
 ## Tests
 

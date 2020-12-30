@@ -19,6 +19,7 @@
 # <http://www.gnu.org/licenses/>.
 
 black
+ipython
 matplotlib
 numpy
 pigpio
