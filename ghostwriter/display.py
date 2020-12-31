@@ -17,8 +17,10 @@ try:
     from adafruit_blinka.board.raspberrypi.raspi_40pin import pin as rpi_pin
 except ImportError as _rpi_import_error:
     rpi_pin = None
+    DEFAULT_PIN = None
 else:
     _rpi_import_error = None
+    DEFAULT_PIN = rpi_pin.D18
 
 
 class Display(abc.ABC):
@@ -48,7 +50,6 @@ class OpenCVDisplay(Display):
         if frame.shape != self.shape:
             raise ValueError("Array shape must match window shape")
         cv2.imshow(self.window_name, frame)
-
 
 
 class MatplotlibDisplay(Display):
@@ -121,35 +122,51 @@ class NeoPixelDisplay(Display):
 
     def __init__(
             self,
-            input_shape: Tuple[int, ...],
-            display_shape: Tuple[int, ...],
-            pin: "rpi_pin.Pin",
+            input_shape: Tuple[int, int],
+            display_shape: Tuple[int, int],
+            pin: "rpi_pin.Pin" = DEFAULT_PIN,
+            brightness: float = 1.0,
     ):
         self._input_shape = input_shape
         self._display_shape = display_shape
         self._n_pixels = np.product(input_shape[:1])
         self._pin = pin
         self._logger = logging.getLogger(__name__)
+        self._raster_index = raster_index(
+            self._display_shape,
+        )
         if rpi_pin is not None:
-            self._pixels = neopixel.NeoPixel(rpi_pin.D18, 16 * 16, brightness=0.05)
+            self._pixels = neopixel.NeoPixel(
+                rpi_pin.D18,
+                np.product(display_shape),
+                brightness=brightness,
+            )
         else:
-            self._logger.warning("Unable to import pixels: %s", _rpi_import_error)
-        self._raster_index = np.arange(self._n_pixels)
+            self._logger.warning("Unable to import pins: %s", _rpi_import_error)
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self._pixels.deinit()
 
     def show(self, frame: np.ndarray) -> None:
-        pass
+        resized = cv2.resize(frame, self._display_shape, interpolation=cv2.INTER_AREA)
+        self._pixels[:] = resized[self._raster_index]
 
 
 def raster_index(
-        shape: Tuple[int, int],
-        rows: bool = True,
-        reverse_rows: bool = False,
-        reverse_columns: bool = False,
+    shape: Tuple[int, int],
+    rows: bool = True,
+    reverse_rows: bool = False,
+    reverse_columns: bool = False,
 ) -> Tuple[np.ndarray, ...]:
     """
 
     Parameters
     ----------
+    shape
+        The shape of the array.
     rows
         If ``True``, raster along rows. Otherwise, raster along columns.
     reverse_rows
