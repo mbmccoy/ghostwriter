@@ -16,11 +16,14 @@ build step. If you are using SSH to connect to the pi, consider using
 `screen` or other tool to ensure that the command is not terminated before 
 it completes the build.
 
-## Running
-Run the production environment with
+## Start up
+- start the production environment:
 ```bash
 make pi-setup
 ```
+- run "hello world" for LEDs from ghostwriter/pixel with `sudo`:
+`sudo $(which python) hello_world.py`
+
 
 ## Tests
 
@@ -41,6 +44,18 @@ want changes, run `make lint-check` (this is what's run in CI).
 
 # Troubleshooting
 
+
+## raspberry pi 3b+
+
+- I've verified that LEDs are correctly wired and powered, but my LEDs randomly blink when running 'hello_world.py'. 
+
+Solution 1: Disable the audio drivers.  The audio drivers can interfere with the gpio messages to the LEDs, causing erratic output.  Navigate to `/boot/config.txt` and make the following edits:
+
+```bash
+hdmi_force_hotplug=1
+dtparam=audio=off
+```
+Solution 2: if you are using a voltage shifter, verify that all components (pi/3v3,5v,lights) have a common ground.  Messages can be corrupted from "floating ground" issues.
 
 ## M1 Mac
 
