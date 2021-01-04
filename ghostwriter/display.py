@@ -4,7 +4,10 @@ from typing import Tuple, Dict
 
 import cv2
 import numpy as np
-from matplotlib import pyplot as plt
+try:
+    from matplotlib import pyplot as plt
+except ImportError:
+    matplotlib = None
 
 try:
     import neopixel
