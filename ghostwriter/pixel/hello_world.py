@@ -26,7 +26,7 @@ def run(display: Display, shape: Tuple[int, ...]):
     start_time = time.time()
     n = np.product(shape)
     image = np.zeros(shape)
-    for i, j in product(*shape):
+    for i, j in product(*map(range, shape)):
         pixel_value = (100 % 256, (2 * i) % 256, (128 - 2 * i) % 256)
         image[i, j] = pixel_value
         display.show(image)
