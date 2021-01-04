@@ -13,7 +13,7 @@ from ghostwriter.display import NeoPixelDisplay, Display
 
 
 def main():
-    shape = (16, 16)
+    shape = (16, 24)
     with NeoPixelDisplay(
         display_shape=shape,
         pin=pin.D18,
