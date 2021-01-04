@@ -28,7 +28,7 @@ def run(display: Display, shape: Tuple[int, ...]):
     image = np.zeros((*shape, 3))
     for i, j in product(*map(range, shape)):
         pixel_value = (100 % 256, (2 * i) % 256, (128 - 2 * i) % 256)
-        image[i, j] = pixel_value
+        image[i, j, :] = pixel_value
         display.show(image)
     run_time = time.time() - start_time
     print(f"Ran {n} frames in {run_time} seconds ({i/run_time} fps)")
