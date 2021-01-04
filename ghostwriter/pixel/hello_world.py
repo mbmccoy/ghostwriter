@@ -28,10 +28,10 @@ def run(display: Display, shape: Tuple[int, ...]):
     image = np.zeros((shape[0], shape[1], 3), dtype=int)
     for i, j in product(*map(range, shape)):
         pixel_value = (100 % 256, (2 * i) % 256, (128 - 2 * i) % 256)
-        image[i, i, :] = pixel_value
+        image[i, j, :] = pixel_value
         display.show(image)
     run_time = time.time() - start_time
-    print(f"Ran {n} frames in {run_time} seconds ({i/run_time} fps)")
+    print(f"Ran {n} frames in {run_time} seconds ({n/run_time} fps)")
 
 
 if __name__ == "__main__":
