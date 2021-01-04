@@ -17,7 +17,7 @@ def main():
     with NeoPixelDisplay(
         display_shape=shape,
         pin=pin.D18,
-        brightness=1.0,
+        brightness=0.1,
     ) as display:
         run(display, shape=shape)
 
