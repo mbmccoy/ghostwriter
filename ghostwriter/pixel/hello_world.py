@@ -17,7 +17,7 @@ def main():
     with NeoPixelDisplay(
         display_shape=shape,
         pin=pin.D18,
-        brightness=0.05,
+        brightness=0.2,
     ) as display:
         run(display, shape=shape)
 
@@ -27,7 +27,7 @@ def run(display: Display, shape: Tuple[int, ...]):
     n = np.product(shape)
     image = np.zeros((shape[0], shape[1], 3), dtype=int)
     for i, j in product(*map(range, shape)):
-        pixel_value = (100 % 256, (8 * i) % 256, (128 - 12 * j) % 256)
+        pixel_value = (100 % 128, (8 * i) % 128, (128 - 12 * j) % 128)
         image[i, j, :] = pixel_value
         display.show(image)
     run_time = time.time() - start_time
