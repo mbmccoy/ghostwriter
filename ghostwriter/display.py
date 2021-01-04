@@ -122,14 +122,12 @@ class NeoPixelDisplay(Display):
 
     def __init__(
             self,
-            input_shape: Tuple[int, int],
             display_shape: Tuple[int, int],
             pin: "rpi_pin.Pin" = DEFAULT_PIN,
             brightness: float = 1.0,
     ):
-        self._input_shape = input_shape
         self._display_shape = display_shape
-        self._n_pixels = np.product(input_shape[:1])
+        self._n_pixels = np.product(self._display_shape[:1])
         self._pin = pin
         self._logger = logging.getLogger(__name__)
         self._raster_index = raster_index(
