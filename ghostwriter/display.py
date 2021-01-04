@@ -152,7 +152,7 @@ class NeoPixelDisplay(Display):
         self._pixels.deinit()
 
     def show(self, frame: np.ndarray) -> None:
-        resized = cv2.resize(frame, self._display_shape, interpolation=cv2.INTER_AREA)
+        #resized = cv2.resize(frame, self._display_shape, interpolation=cv2.INTER_AREA)
         self._pixels[:] = resized[self._raster_index]
 
 
