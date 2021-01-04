@@ -3,6 +3,7 @@ import logging
 import cv2 as cv
 import numpy as np
 
+from ghostwriter.display import NeoPixelDisplay, MatplotlibDisplay, OpenCVDisplay, AVIFileDisplay
 from ghostwriter.camera.colors import xkcd_color_matrix_like
 from ghostwriter.camera.keymap import QUIT
 from ghostwriter.utils import default_arguments, set_up_logging
@@ -17,6 +18,17 @@ BACKGROUND_SUBTRACTION_ALGORITHMS = {
     "MOG": cv.bgsegm.createBackgroundSubtractorMOG,
 }
 
+DISPLAYS = {
+    "led": NeoPixelDisplay,
+    "matplotlib": MatplotlibDisplay,
+    "opencv": OpenCVDisplay,
+    "avi": AVIFileDisplay,
+}
+
+
+def get_display(display_name):
+    return DISPLAYS[display_name]()
+
 
 def main():
     parser = default_arguments(description="Background substraction methods.")
@@ -24,6 +36,22 @@ def main():
         "--algorithm",
         choices=sorted(BACKGROUND_SUBTRACTION_ALGORITHMS),
         default="GMG",
+    )
+
+    parser.add_argument(
+        "--display",
+        choices=sorted(DISPLAYS),
+        default="opencv",
+    )
+    parser.add_argument(
+        "--width",
+        type=int,
+        default=16,
+    )
+    parser.add_argument(
+        "--height",
+        type=int,
+        default=16,
     )
 
     args = parser.parse_args()

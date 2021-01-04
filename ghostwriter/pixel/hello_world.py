@@ -1,24 +1,37 @@
+from itertools import product
+from typing import Tuple
+
 from adafruit_blinka.board.raspberrypi.raspi_40pin import pin
 import time
-import neopixel
+
+import numpy as np
+
+from ghostwriter.display import NeoPixelDisplay, Display
+
 
 # GPIO.XX =  pin.DXX
 
 
 def main():
-    pixels = neopixel.NeoPixel(pin.D18, 16 * 16, brightness=0.05)
-    try:
-        run(pixels)
-    finally:
-        for i in range(pixels.n):
-            pixels[i] = [0, 0, 0]
+    shape = (16, 16)
+    with NeoPixelDisplay(
+        display_shape=shape,
+        pin=pin.D18,
+        brightness=0.1,
+    ) as display:
+        run(display, shape=shape)
 
 
-def run(pixels):
-    n = pixels.n
-    for i in range(n):
-        pixel_value = (100 % 256, (2 * i) % 256, (128 - 2 * i) % 256)
-        pixels[i % pixels.n] = pixel_value
+def run(display: Display, shape: Tuple[int, ...]):
+    start_time = time.time()
+    n = np.product(shape)
+    image = np.zeros((shape[0], shape[1], 3), dtype=int)
+    for i, j in product(*map(range, shape)):
+        pixel_value = (100 % 128, (8 * i) % 128, (128 - 12 * j) % 128)
+        image[i, j, :] = pixel_value
+        display.show(image)
+    run_time = time.time() - start_time
+    print(f"Ran {n} frames in {run_time} seconds ({n/run_time} fps)")
 
 
 if __name__ == "__main__":
